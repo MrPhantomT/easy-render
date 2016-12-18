@@ -12,9 +12,7 @@
 
 (defmethod parse-values :f [_ values]
   (->> values
-       (mapcat #(split % #"\/"))
-       (mapv read-string)
-       (partition 3)
+       (map #(mapv read-string (split % #"\/")))
        (apply build-face)))
 
 (defmethod parse-values :default [_ values]
