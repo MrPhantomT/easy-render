@@ -23,13 +23,16 @@
     (.show)))
 
 (defn paint [model g]
-  (letfn [(drawLine [x0 y0 x1 y1] (.drawLine g x0 y0 x1 y1) )
-          (setColor [color] (.setColor g color))]
-    (setColor (Color. 250, 235, 215))
-    (->> model
-      render
-      (map #(apply drawLine %))
-      doall)))
+  (letfn [(setColor [color] (.setColor g color))
+          (fillPolygon [points [r green b a]]
+            (setColor (Color. r green b a))
+            (.fillPolygon g (int-array (mapv first points) ) (int-array (map second points ) ) (count points )))
+          ]
+    (->> (normalize (build-vector 0 -1 2) )
+      (render model)
+      (map #(apply fillPolygon %))
+      doall))
+  )
 
 (defn load-model [file-name]
   (with-open [file-stream (reader file-name)]
