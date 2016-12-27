@@ -25,12 +25,12 @@
 (defn paint [model g]
   (letfn [(setColor [color] (.setColor g color))
           (fillPolygon [points [r green b a]]
-            (setColor (Color. r green b a))
-            (.fillPolygon g (int-array (mapv first points) ) (int-array (map second points ) ) (count points )))
+            (setColor (Color. 255 255 255))
+            (doall (pmap #(.drawLine g (first %) (second %) (first %) (second %)) points) ))
           ]
-    (->> (normalize (build-vector 0 -1 2) )
+    (->> (normalize (build-vector 0 0 1) )
       (render model)
-      (map #(apply fillPolygon %))
+      (pmap #(apply fillPolygon %))
       doall))
   )
 
